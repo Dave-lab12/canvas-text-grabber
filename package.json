@@ -1,6 +1,6 @@
 {
   "name": "canvas-text-grabber",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "an interactive sketch tool that allows users to draw a selection area on a web page and capture text within that area.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
