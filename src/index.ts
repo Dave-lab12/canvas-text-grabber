@@ -38,7 +38,7 @@ export class CanvasTextGrabber {
         stokeStyle: "red",
         lineWidth: 10,
         lineCap: "round",
-        canvasStyle: "border:10px solid red;position:absolute;top:0;left:0;zIndex:10",
+        canvasStyle: "border:10px solid red;position:fixed;top:0;left:0;zIndex:10",
         canvasId: "IS-canvas",
         spanClass: "text-span",
         spanStyle: "",
