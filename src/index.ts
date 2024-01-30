@@ -220,13 +220,14 @@ export class CanvasTextGrabber {
         const elements = this.getSelectedElements();
         const text = this.getTextFromDomElements(elements);
 
+        if (this.onTextSelectedCallback) {
+            this.onTextSelectedCallback(text);
+        }
+
         if (this.onDrawingFinishedCallback) {
             this.onDrawingFinishedCallback(true);
         }
 
-        if (this.onTextSelectedCallback) {
-            this.onTextSelectedCallback(text);
-        }
     }
 
     private addEventListeners(element: HTMLElement, eventHandlerOptionsTriples: Array<[string, EventListener | EventListenerObject, boolean | AddEventListenerOptions | undefined]>) {
