@@ -72,18 +72,28 @@ export class CanvasTextGrabber {
         this.canvas.width = window.innerWidth;
     }
 
-    private getEventCoordinates(event: TouchEvent | MouseEvent) {
+    private getEventCoordinates(event: TouchEvent | MouseEvent | PointerEvent) {
         if (!this.canvas) return { offsetX: 0, offsetY: 0 };
-        let offsetX, offsetY;
-        if ('touches' in event) {
-            // Handle touch events
+
+        let offsetX = 0, offsetY = 0;
+
+        if (event instanceof TouchEvent) {
             offsetX = event.touches[0].clientX - this.canvas.getBoundingClientRect().left;
             offsetY = event.touches[0].clientY - this.canvas.getBoundingClientRect().top;
-        } else {
-            // Handle mouse events
+        } else if (event instanceof PointerEvent) {
+
+            if (event.pointerType === 'mouse') {
+                offsetX = event.offsetX;
+                offsetY = event.offsetY;
+            } else if (event.pointerType === 'touch') {
+                offsetX = event.clientX - this.canvas.getBoundingClientRect().left;
+                offsetY = event.clientY - this.canvas.getBoundingClientRect().top;
+            }
+        } else if (event instanceof MouseEvent) {
             offsetX = event.offsetX;
             offsetY = event.offsetY;
         }
+
         return { offsetX, offsetY };
     }
 
