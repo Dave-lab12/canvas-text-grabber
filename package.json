@@ -1,34 +1,38 @@
 {
   "name": "canvas-text-grabber",
   "version": "0.0.5",
-  "description": "an interactive sketch tool that allows users to draw a selection area on a web page and capture text within that area.",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsup"
-  },
+  "author": "Dawit Mekonnen",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Dave-lab12/canvas-text-grabber.git"
   },
-  "keywords": [
-    "canvas"
-  ],
-  "author": "Dawit Mekonnen",
-  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "devDependencies": {
+    "@happy-dom/global-registrator": "^13.3.8",
+    "@swc/core": "^1.3.106",
+    "@types/bun": "^1.0.4",
+    "happy-dom": "^13.3.8",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
   "bugs": {
     "url": "https://github.com/Dave-lab12/canvas-text-grabber/issues"
   },
+  "description": "an interactive sketch tool that allows users to draw a selection area on a web page and capture text within that area.",
+  "files": [
+    "dist"
+  ],
   "homepage": "https://github.com/Dave-lab12/canvas-text-grabber#readme",
-  "devDependencies": {
-    "@swc/core": "^1.3.106",
-    "@types/node": "^20.11.9",
-    "tsup": "^8.0.1",
-    "typescript": "^5.3.3",
-    "ts-node": "^10.9.2"
-  }
+  "keywords": [
+    "canvas"
+  ],
+  "license": "ISC",
+  "scripts": {
+    "build": "tsup",
+    "test": "bun test"
+  },
+  "type": "module",
+  "dependencies": {}
 }
