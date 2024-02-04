@@ -273,6 +273,8 @@ export class CanvasTextGrabber {
 
     public finishDrawing() {
         this.canvas?.remove();
+        this.canvas = null;
+
         document.body.style.overflow = 'auto';
         this.onDrawingFinishedCallback = null;
         this.onTextSelectedCallback = null;
@@ -307,6 +309,8 @@ export class CanvasTextGrabber {
 
     public initialize(element: HTMLElement | null) {
         if (!element) return;
+        if (this.canvas) return
+
         this.container = element;
         this.saveCurrentDomState();
         this.wrapTextWithSpan(element);
