@@ -1,18 +1,36 @@
+import type * as CSS from 'csstype';
+import { mergeStyles } from './helpers.js'
 type Options = {
     selectedElementsClass: string,
-    selectedElementsStyle: string,
+    selectedElementsStyle: Partial<CSS.Properties>,
     stokeStyle: string,
     lineWidth: number,
     lineCap: CanvasLineCap,
-    canvasStyle: string,
+    canvasStyles: Partial<CSS.Properties>,
     canvasId: string,
     spanClass: string,
     spanWrapperClass: string,
-    spanStyle: string,
-    spanWrapperStyle: string
+    spanStyle: Partial<CSS.Properties>,
+    spanWrapperStyle: Partial<CSS.Properties>
 }
+
 type DrawingFinishedCallback = (finished: boolean) => void;
 type TextSelectedCallback = (text: string | undefined) => void;
+
+
+const defaultOptions: Options = {
+    selectedElementsClass: "highlight",
+    selectedElementsStyle: { backgroundColor: "yellow" },
+    canvasId: "IS-canvas",
+    spanClass: "text-span",
+    spanWrapperClass: "span-wrapper-div",
+    spanWrapperStyle: { display: "inline" },
+    canvasStyles: { border: "10px solid red", position: "fixed", top: "0", left: "0", zIndex: "0" },
+    lineCap: "round",
+    lineWidth: 10,
+    spanStyle: {},
+    stokeStyle: ""
+}
 
 export class CanvasTextGrabber {
     private isDrawing = false;
@@ -32,18 +50,7 @@ export class CanvasTextGrabber {
     private onTextSelectedCallback: TextSelectedCallback | null = null;
 
     private drawnPath: { x: number; y: number; }[] = [];
-    private options: Options = {
-        selectedElementsClass: "highlighted",
-        selectedElementsStyle: "background-color:yellow;",
-        stokeStyle: "red",
-        lineWidth: 10,
-        lineCap: "round",
-        canvasStyle: "border:10px solid red;position:fixed;top:0;left:0;zIndex:10",
-        canvasId: "IS-canvas",
-        spanClass: "text-span",
-        spanStyle: "",
-        spanWrapperClass: "span-wrapper-div",
-        spanWrapperStyle: "display:inline;"
+    private options: Partial<Options> = {
     }
 
     constructor(options?: Partial<Options>) {
@@ -56,10 +63,11 @@ export class CanvasTextGrabber {
 
     private drawCanvas(element: HTMLElement) {
         const canvas = document.createElement('canvas');
-        canvas.id = this.options.canvasId;
+        canvas.id = this.options.canvasId || defaultOptions.canvasId;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        canvas.style.cssText = this.options.canvasStyle;
+        const styles = mergeStyles(defaultOptions.canvasStyles, this.options.canvasStyles ?? {});
+        Object.assign(canvas.style, styles);
         document.body.style.overflow = 'hidden';
 
         element ? element.appendChild(canvas) : document.body.appendChild(canvas);
@@ -106,9 +114,9 @@ export class CanvasTextGrabber {
         this.drawnPath = [{ x: offsetX, y: offsetY }];
         this.ctx?.beginPath();
         this.ctx?.moveTo(offsetX, offsetY);
-        this.ctx && (this.ctx.lineWidth = this.options.lineWidth);
-        this.ctx && (this.ctx.lineCap = this.options.lineCap);
-        this.ctx && (this.ctx.strokeStyle = this.options.stokeStyle);
+        this.ctx && (this.ctx.lineWidth = this.options.lineWidth || defaultOptions.lineWidth);
+        this.ctx && (this.ctx.lineCap = this.options.lineCap || defaultOptions.lineCap);
+        this.ctx && (this.ctx.strokeStyle = this.options.stokeStyle || defaultOptions.stokeStyle);
     }
 
     private wrapTextWithSpan(element: HTMLElement) {
@@ -118,16 +126,25 @@ export class CanvasTextGrabber {
             if (child.nodeType === Node.TEXT_NODE) {
                 const text = child.nodeValue;
                 if (!text) return;
+                const spanClass = this.options.spanClass || defaultOptions.spanClass;
+                const spanStyle = mergeStyles(defaultOptions.spanStyle, this.options.spanStyle ?? {});
                 const spans = text
                     .split(/\s+/)
                     .filter((word: string) => word.length > 0)
-                    .map((word: string) => `<span class=${this.options.spanClass} style=${this.options.spanStyle}>${word}</span>`)
+                    .map((word: string) => {
+                        const span = document.createElement('span');
+                        span.classList.add(spanClass);
+                        Object.assign(span.style, spanStyle);
+                        span.textContent = word;
+                        return span.outerHTML;
+                    })
                     .join(' ');
 
                 const spanWrapper = document.createElement('div');
-                this.options.spanWrapperStyle && (spanWrapper.style.cssText = this.options.spanWrapperStyle);
 
-                spanWrapper.classList.add(this.options.spanWrapperClass);
+                const spanWrapperStyle = mergeStyles(defaultOptions.spanWrapperStyle, this.options.spanWrapperStyle ?? {});
+                Object.assign(spanWrapper.style, spanWrapperStyle);
+                spanWrapper.classList.add(this.options.spanWrapperClass ?? defaultOptions.spanWrapperClass);
                 spanWrapper.innerHTML = spans;
                 element.replaceChild(spanWrapper, child);
             } else if (child.nodeType === Node.ELEMENT_NODE) {
@@ -201,10 +218,11 @@ export class CanvasTextGrabber {
         allSpans.forEach((span) => {
             if (this.isElementInsideArea(span, this.boundingRect)) {
                 insideElements.push(span);
-                span.classList.add(this.options.selectedElementsClass);
-                span.style.cssText += this.options.selectedElementsStyle;
+                span.classList.add(this.options.selectedElementsClass ?? defaultOptions.selectedElementsClass);
+                const styles = mergeStyles(defaultOptions.selectedElementsStyle, this.options.selectedElementsStyle ?? {});
+                Object.assign(span.style, styles);
             } else {
-                span.classList.remove(this.options.selectedElementsClass);
+                span.classList.remove(this.options.selectedElementsClass ?? defaultOptions.selectedElementsClass);
                 span.style.cssText = '';
             }
         });
