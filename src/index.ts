@@ -1,21 +1,5 @@
-import type * as CSS from 'csstype';
 import { mergeStyles } from './helpers.js'
-type Options = {
-    selectedElementsClass: string,
-    selectedElementsStyle: Partial<CSS.Properties>,
-    stokeStyle: string,
-    lineWidth: number,
-    lineCap: CanvasLineCap,
-    canvasStyles: Partial<CSS.Properties>,
-    canvasId: string,
-    spanClass: string,
-    spanWrapperClass: string,
-    spanStyle: Partial<CSS.Properties>,
-    spanWrapperStyle: Partial<CSS.Properties>
-}
-
-type DrawingFinishedCallback = (finished: boolean) => void;
-type TextSelectedCallback = (text: string | undefined) => void;
+import type { DrawingFinishedCallback, Options, TextSelectedCallback } from './type.js';
 
 
 const defaultOptions: Options = {
@@ -253,7 +237,7 @@ export class CanvasTextGrabber {
         }
 
         if (this.onDrawingFinishedCallback) {
-            this.onDrawingFinishedCallback(true);
+            this.onDrawingFinishedCallback(elements);
         }
 
     }
