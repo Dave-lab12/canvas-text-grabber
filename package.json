@@ -1,6 +1,6 @@
 {
   "name": "canvas-text-grabber",
-  "version": "0.1.2",
+  "version": "0.1.0",
   "description": "an interactive sketch tool that allows users to draw a selection area on a web page and capture text within that area.",
   "homepage": "https://github.com/Dave-lab12/canvas-text-grabber#readme",
   "repository": {
