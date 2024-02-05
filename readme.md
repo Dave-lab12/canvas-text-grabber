@@ -42,9 +42,9 @@ const grabber = new CanvasTextGrabber({
 // Initialize on a specific element or the entire document body
 grabber.initialize(document.querySelector('.my-container')); 
 
-// Listen for drawing finished and text selection events
-grabber.isDrawingFinished((finished) => {
-  console.log('Drawing finished!');
+// Listen for drawing completion and access selected elements
+grabber.isDrawingFinished((selectedElements) => {
+  console.log('Drawing completed. Selected elements:', selectedElements);
 });
 
 grabber.getSelectedText((text) => {
