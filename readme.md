@@ -1,8 +1,6 @@
 # CanvasTextGrabber
 **Extract text from web pages with intuitive drawing and highlighting**
 
-## ⚠️ Highly Experimental 
-#### **Don't use it in production yet**
 
 ## Demo
 ![demo](https://github.com/Dave-lab12/canvas-text-grabber/assets/56738450/2e5f1d7f-6507-4ef3-9945-878b1846f7d2)
